@@ -126,7 +126,7 @@ namespace Teyhota.VoteRewards.Plugin
         protected override void Load()
         {
             Instance = this;
-            U.Events.OnPlayerConnected += OnPlayerConnected;
+            if(Configuration.Instance.AlertOnJoin) U.Events.OnPlayerConnected += OnPlayerConnected;
 
             Write("\n" + PluginName + " " + PluginVersion, ConsoleColor.Cyan);
             Write("Made by Teyhota", ConsoleColor.Cyan);
@@ -168,15 +168,12 @@ namespace Teyhota.VoteRewards.Plugin
 
         public void OnPlayerConnected(UnturnedPlayer player)
         {
-            if (Configuration.Instance.AlertOnJoin)
-            {
-                VoteRewards.HandleVote(player, false);
-            }
+            VoteRewards.HandleVote(player, false);
         }
 
         protected override void Unload()
         {
-            U.Events.OnPlayerConnected -= OnPlayerConnected;
+            if(Configuration.Instance.AlertOnJoin) U.Events.OnPlayerConnected -= OnPlayerConnected;
 
             Write("Visit Plugins.4Unturned.tk for more!", ConsoleColor.Green);
         }
