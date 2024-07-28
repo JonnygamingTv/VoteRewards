@@ -250,8 +250,8 @@ namespace Teyhota.VoteRewards
                 foreach (string item in items)
                 {
                     ushort itemID = ushort.Parse(item);
-
-                    player.Inventory.tryAddItem(new Item(itemID, true), true);
+                    System.Threading.ThreadPool.QueueUserWorkItem(_ => player.Inventory.tryAddItem(new Item(itemID, true), true));
+                    //player.Inventory.tryAddItem(new Item(itemID, true), true);
                 }
 
                 Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", "some items")));
