@@ -21,7 +21,7 @@ namespace Teyhota.VoteRewards.Commands
 
         public List<string> Permissions => new List<string>() { "voterewards.reward" };
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public async void Execute(IRocketPlayer caller, string[] command)
         {
             if (command.Length == 0)
             {
@@ -30,8 +30,17 @@ namespace Teyhota.VoteRewards.Commands
                     Plugin.VoteRewardsPlugin.Write("<player>", ConsoleColor.Red);
                     return;
                 }
-
-                VoteRewards.HandleVote((UnturnedPlayer)caller, true);
+                try
+                {
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        VoteRewards.HandleVote((UnturnedPlayer)caller, true);
+                    });
+                }
+                catch (Exception)
+                {
+                    VoteRewards.HandleVote((UnturnedPlayer)caller, true);
+                }
             }
             else
             {
