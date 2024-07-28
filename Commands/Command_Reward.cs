@@ -37,8 +37,9 @@ namespace Teyhota.VoteRewards.Commands
                         VoteRewards.HandleVote((UnturnedPlayer)caller, true);
                     });
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Rocket.Core.Logging.Logger.LogException(e);
                     VoteRewards.HandleVote((UnturnedPlayer)caller, true);
                 }
             }

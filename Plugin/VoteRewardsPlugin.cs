@@ -23,6 +23,8 @@ namespace Teyhota.VoteRewards.Plugin
         public static bool Uconomy = false;
         public static VoteRewardsPlugin Instance;
 
+        public static System.Collections.Generic.List<MsgObj> MsgList = new System.Collections.Generic.List<MsgObj>();
+
         public static void Write(string message)
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -133,7 +135,7 @@ namespace Teyhota.VoteRewards.Plugin
             Write("for Rocket " + RocketVersion + "\n", ConsoleColor.Cyan);
 
             // update check
-            if (Instance.Configuration.Instance.DisableAutoUpdate != "true")
+            if (Instance.Configuration.Instance.DisableAutoUpdate != true)
             {
                 CheckForUpdates("http://plugins.4unturned.tk/plugins/VoteRewards/update.xml");
             }
@@ -164,17 +166,29 @@ namespace Teyhota.VoteRewards.Plugin
                     break;
                 }
             }
+
+            StartCoroutine(nameof(MsgLoop));
         }
 
         public void OnPlayerConnected(UnturnedPlayer player)
         {
             VoteRewards.HandleVote(player, false);
         }
+        private System.Collections.IEnumerator MsgLoop()
+        {
+            yield return new UnityEngine.WaitForSeconds(Configuration.Instance.Interval);
+            for (ushort i = 0; i < MsgList.Count; i++)
+            {
+                Rocket.Unturned.Chat.UnturnedChat.Say(MsgList[i].player, MsgList[i].msg, MsgList[i].color);
+            }
+            MsgList.Clear();
+            StartCoroutine(nameof(MsgLoop));
+        }
 
         protected override void Unload()
         {
             if(Configuration.Instance.AlertOnJoin) U.Events.OnPlayerConnected -= OnPlayerConnected;
-
+            StopAllCoroutines();
             Write("Visit Plugins.4Unturned.tk for more!", ConsoleColor.Green);
         }
 

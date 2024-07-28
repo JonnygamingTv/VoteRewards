@@ -7,11 +7,11 @@ namespace Teyhota.VoteRewards.Plugin
     public class VoteRewardsConfig : IRocketPluginConfiguration
     {
         public static VoteRewardsConfig Instance;
-
-        public string DisableAutoUpdate;
-        public string VotePageURL;
         public bool AlertOnJoin;
         public bool GlobalAnnouncement;
+        public bool DisableAutoUpdate;
+        public float Interval;
+        public string VotePageURL;
         public List<Reward> Rewards;
         public List<Service> Services;
 
@@ -52,10 +52,11 @@ namespace Teyhota.VoteRewards.Plugin
         public void LoadDefaults()
         {
             Instance = this;
-            DisableAutoUpdate = "true";
-            VotePageURL = "https://unturned-servers.net/my_server_vote_page";
+            DisableAutoUpdate = true;
             AlertOnJoin = true;
             GlobalAnnouncement = true;
+            Interval = 1;
+            VotePageURL = "https://unturned-servers.net/my_server_vote_page";
             Rewards = new List<Reward>()
             {
                 new Reward("item", "235,236,237,238,253,1369,1371,1371,297,298,298,298,15,15,15,15,15", 40),
