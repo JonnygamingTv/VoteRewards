@@ -179,14 +179,14 @@ namespace Teyhota.VoteRewards
 
             if (voteResult == null && giveReward == true)
             {
-                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red));
+                Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red));
                 //UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red);
             }
             else
             {
                 if (voteResult == "0") // Has not voted
                 {
-                    System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("not_yet_voted", serviceName), Color.red));
+                    Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("not_yet_voted", serviceName), Color.red));
                 }
                 else if (voteResult == "1") // Has voted & not claimed
                 {
@@ -198,19 +198,19 @@ namespace Teyhota.VoteRewards
                         }
                         else
                         {
-                            System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red));
+                            Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red));
                         }
                     }
                     else
                     {
-                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("pending_reward")));
+                        Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("pending_reward")));
                     }
                 }
                 else if (voteResult == "2") // Has voted & claimed
                 {
                     if (giveReward)
                     {
-                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("already_voted"), Color.red));
+                        Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("already_voted"), Color.red));
                     }
                 }
             }
@@ -239,7 +239,7 @@ namespace Teyhota.VoteRewards
 
             if (selectedElement == null || value == null)
             {
-                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, "The admin hasn't setup rewards yet.", Color.red));
+                Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, "The admin hasn't setup rewards yet.", Color.red));
                 return;
             }
 
@@ -250,24 +250,23 @@ namespace Teyhota.VoteRewards
                 foreach (string item in items)
                 {
                     ushort itemID = ushort.Parse(item);
-                    System.Threading.ThreadPool.QueueUserWorkItem(_ => player.Inventory.tryAddItem(new Item(itemID, true), true));
+                    Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => player.Inventory.tryAddItem(new Item(itemID, true), true));
                     //player.Inventory.tryAddItem(new Item(itemID, true), true);
                 }
-
-                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", "some items")));
+                Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(()=>UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", "some items")));
             }
             else if (selectedElement == "xp" || selectedElement == "exp")
             {
                 player.Experience += uint.Parse(value);
 
-                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " xp")));
+                Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " xp")));
             }
             else if (selectedElement == "group" || selectedElement == "permission")
             {
                 R.Permissions.AddPlayerToGroup(value, player);
                 R.Permissions.Reload();
 
-                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " Permission Group")));
+                Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " Permission Group")));
             }
             else if (selectedElement == "uconomy" || selectedElement == "money")
             {
@@ -277,7 +276,7 @@ namespace Teyhota.VoteRewards
                     {
                         Uconomy.Instance.Database.IncreaseBalance(player.CSteamID.ToString(), decimal.Parse(value));
 
-                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " Uconomy " + Uconomy.Instance.Configuration.Instance.MoneyName + "s")));
+                        Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " Uconomy " + Uconomy.Instance.Configuration.Instance.MoneyName + "s")));
                     });
                 }
             }
@@ -289,7 +288,7 @@ namespace Teyhota.VoteRewards
                     {
                         SlotManager.AddSlot(player, 1, int.Parse(value));
 
-                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", "a CustomKits slot with item limit of " + value)));
+                        Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(() => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", "a CustomKits slot with item limit of " + value)));
                     });
                 }
             }
@@ -302,7 +301,7 @@ namespace Teyhota.VoteRewards
                     var p = sP.playerID.steamID;
                     if (p != player.CSteamID)
                     {
-                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(UnturnedPlayer.FromSteamPlayer(sP), Plugin.VoteRewardsPlugin.Instance.Translate("reward_announcement", player.CharacterName, serviceName), Color.green));
+                        Rocket.Core.Utils.TaskDispatcher.QueueOnMainThread(()=> UnturnedChat.Say(UnturnedPlayer.FromSteamPlayer(sP), Plugin.VoteRewardsPlugin.Instance.Translate("reward_announcement", player.CharacterName, serviceName), Color.green));
                     }
                 }
             }
