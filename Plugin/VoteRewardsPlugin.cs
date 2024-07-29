@@ -23,6 +23,8 @@ namespace Teyhota.VoteRewards.Plugin
         public static bool Uconomy = false;
         public static VoteRewardsPlugin Instance;
 
+        public delegate void TriggMsg();
+
         public static System.Collections.Generic.List<MsgObj> MsgList = new System.Collections.Generic.List<MsgObj>();
 
         public static void Write(string message)
@@ -167,12 +169,12 @@ namespace Teyhota.VoteRewards.Plugin
                 }
             }
 
-            StartCoroutine(nameof(MsgLoop));
+            // StartCoroutine(nameof(MsgLoop));
         }
 
         public void OnPlayerConnected(UnturnedPlayer player)
         {
-            VoteRewards.HandleVote(player, false);
+            System.Threading.Tasks.Task.Run(()=>VoteRewards.HandleVote(player, false));
         }
         private System.Collections.IEnumerator MsgLoop()
         {

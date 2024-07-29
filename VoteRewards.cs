@@ -179,14 +179,14 @@ namespace Teyhota.VoteRewards
 
             if (voteResult == null && giveReward == true)
             {
-                Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red));
+                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red));
                 //UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red);
             }
             else
             {
                 if (voteResult == "0") // Has not voted
                 {
-                    Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("not_yet_voted", serviceName), Color.red));
+                    System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("not_yet_voted", serviceName), Color.red));
                 }
                 else if (voteResult == "1") // Has voted & not claimed
                 {
@@ -198,19 +198,19 @@ namespace Teyhota.VoteRewards
                         }
                         else
                         {
-                            Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red));
+                            System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red));
                         }
                     }
                     else
                     {
-                        Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("pending_reward")));
+                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("pending_reward")));
                     }
                 }
                 else if (voteResult == "2") // Has voted & claimed
                 {
                     if (giveReward)
                     {
-                        Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("already_voted"), Color.red));
+                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("already_voted"), Color.red));
                     }
                 }
             }
@@ -239,7 +239,7 @@ namespace Teyhota.VoteRewards
 
             if (selectedElement == null || value == null)
             {
-                Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, "The admin hasn't setup rewards yet.", Color.red));
+                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, "The admin hasn't setup rewards yet.", Color.red));
                 return;
             }
 
@@ -254,20 +254,20 @@ namespace Teyhota.VoteRewards
                     //player.Inventory.tryAddItem(new Item(itemID, true), true);
                 }
 
-                Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", "some items")));
+                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", "some items")));
             }
             else if (selectedElement == "xp" || selectedElement == "exp")
             {
                 player.Experience += uint.Parse(value);
 
-                Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " xp")));
+                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " xp")));
             }
             else if (selectedElement == "group" || selectedElement == "permission")
             {
                 R.Permissions.AddPlayerToGroup(value, player);
                 R.Permissions.Reload();
 
-                Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " Permission Group")));
+                System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " Permission Group")));
             }
             else if (selectedElement == "uconomy" || selectedElement == "money")
             {
@@ -277,7 +277,7 @@ namespace Teyhota.VoteRewards
                     {
                         Uconomy.Instance.Database.IncreaseBalance(player.CSteamID.ToString(), decimal.Parse(value));
 
-                        Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " Uconomy " + Uconomy.Instance.Configuration.Instance.MoneyName + "s")));
+                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " Uconomy " + Uconomy.Instance.Configuration.Instance.MoneyName + "s")));
                     });
                 }
             }
@@ -289,7 +289,7 @@ namespace Teyhota.VoteRewards
                     {
                         SlotManager.AddSlot(player, 1, int.Parse(value));
 
-                        Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", "a CustomKits slot with item limit of " + value)));
+                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", "a CustomKits slot with item limit of " + value)));
                     });
                 }
             }
@@ -302,7 +302,7 @@ namespace Teyhota.VoteRewards
                     var p = sP.playerID.steamID;
                     if (p != player.CSteamID)
                     {
-                        Plugin.VoteRewardsPlugin.MsgList.Add(new MsgObj(UnturnedPlayer.FromSteamPlayer(sP), Plugin.VoteRewardsPlugin.Instance.Translate("reward_announcement", player.CharacterName, serviceName), Color.green));
+                        System.Threading.ThreadPool.QueueUserWorkItem(_ => UnturnedChat.Say(UnturnedPlayer.FromSteamPlayer(sP), Plugin.VoteRewardsPlugin.Instance.Translate("reward_announcement", player.CharacterName, serviceName), Color.green));
                     }
                 }
             }
