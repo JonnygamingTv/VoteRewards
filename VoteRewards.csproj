@@ -35,7 +35,8 @@
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>F:\SteamLibrary\steamapps\common\Unturned\Unturned_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference><!--
+    </Reference>
+    <!--
     <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
@@ -48,9 +49,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\CustomKits.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="RFRocketLibrary">
-      <HintPath>..\..\RFRocketLibrary-main\RFRocketLibrary-main\bin\Release\RFRocketLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Rocket.API">
       <HintPath>F:\SteamLibrary\steamapps\common\Unturned\Extras\Rocket.Unturned\Rocket.API.dll</HintPath>
