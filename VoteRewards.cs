@@ -262,7 +262,7 @@ namespace Teyhota.VoteRewards
             {
                 // Permission mutations are thread-safe in RocketMod's XML provider.
                 R.Permissions.AddPlayerToGroup(value, player);
-                R.Permissions.Reload();
+                // Not needed: R.Permissions.Reload();
                 QueueSay(player, Plugin.VoteRewardsPlugin.Instance.Translate("reward", value + " Permission Group"));
             }
             else if (type == "uconomy" || type == "money")
