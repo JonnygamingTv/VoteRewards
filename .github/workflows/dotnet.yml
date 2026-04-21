@@ -36,7 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DeedMarket-Plugin
+          name: VoteRewards-Plugin
           path: |
             bin/Release/VoteRewards.dll
             bin/Release/VoteRewards.xml
@@ -46,6 +46,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
-          files: bin/Release/net48/VoteRewards.dll
+          files: bin/Release/VoteRewards.dll
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
