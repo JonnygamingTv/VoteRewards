@@ -38,8 +38,8 @@ jobs:
         with:
           name: DeedMarket-Plugin
           path: |
-            bin/Release/net48/VoteRewards.dll
-            bin/Release/net48/VoteRewards.xml
+            bin/Release/VoteRewards.dll
+            bin/Release/VoteRewards.xml
           if-no-files-found: error
 
       - name: Create Release
