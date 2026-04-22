@@ -118,6 +118,7 @@ namespace Teyhota.VoteRewards
         {
             string voteResult = null;
             string serviceName = null;
+            string lastClaimedService = null;
             Plugin.VoteRewardsConfig.Service matched = null;
 
             var services = Plugin.VoteRewardsPlugin.Instance.Configuration.Instance.Services;
@@ -147,20 +148,31 @@ namespace Teyhota.VoteRewards
                 }
 
                 string result = GetVote(player, service, pollUrl);
-                if (result == "2")
-                    continue; // already claimed on this service — try next
+                if (result == "2") // already claimed on this service — try next
+                {
+                    lastClaimedService = service.Name; // remember it in case all services return "2"
+                    continue;
+                }
 
                 voteResult = result;
                 serviceName = service.Name;
                 matched = service;
                 break;
             }
-
+            // If all services returned "2", surface that instead of "failed_to_connect"
             if (voteResult == null)
             {
-                if (giveReward)
-                    QueueSay(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red);
-                return;
+                if (lastClaimedService != null)
+                {
+                    voteResult = "2";
+                    serviceName = lastClaimedService;
+                }
+                else
+                {
+                    if (giveReward)
+                        QueueSay(player, Plugin.VoteRewardsPlugin.Instance.Translate("failed_to_connect"), Color.red);
+                    return;
+                }
             }
 
             switch (voteResult)
@@ -189,7 +201,7 @@ namespace Teyhota.VoteRewards
                     break;
 
                 case "2": // Has voted and already claimed
-                    if (giveReward)
+                    if (giveReward) // May want to drop this if-check.
                         QueueSay(player,
                             Plugin.VoteRewardsPlugin.Instance.Translate("already_voted"),
                             Color.red);
